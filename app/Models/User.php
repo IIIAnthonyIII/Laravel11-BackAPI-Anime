@@ -15,8 +15,10 @@ class User extends Authenticatable implements JWTSubject
     // The attributes that are mass assignable.
     protected $fillable = [
         'name',
+        'surname',
         'email',
         'password',
+        'status',
     ];
 
     // The attributes that should be hidden for serialization.
