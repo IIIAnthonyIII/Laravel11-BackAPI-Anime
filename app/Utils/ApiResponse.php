@@ -1,9 +1,7 @@
 <?php
-
 namespace App\Utils;
 
-class ApiResponse
-{
+class ApiResponse {
     public $statusCode;
     public $message;
     public $data;
@@ -20,47 +18,41 @@ class ApiResponse
         $this->message = $message;
         $this->statusCode = $statusCode;
     }
-    public function setData($data)
-    {
+
+    public function setData($data) {
         $this->data = $data;
     }
 
-    public function setStatusCode($statusCode)
-    {
+    public function setStatusCode($statusCode) {
         $this->statusCode = $statusCode;
     }
 
-    public function setMessage($message)
-    {
+    public function setMessage($message) {
         $this->message = $message;
     }
 
-    public function setError($message, $statusCode)
-    {
+    public function setError($message, $statusCode) {
         $this->message = $message;
         $this->statusCode = $statusCode;
     }
 
-    public function setPagination($pagination){
+    public function setPagination($pagination) {
         $this->pagination = $pagination;
     }
 
-    public function setDataCorrect($data, $message, $status)
-    {
+    public function setDataCorrect($data, $message, $status) {
         $this->data = $data;
         $this->message = $message;
         $this->statusCode = $status;
     }
 
-    public function returnData()
-    {
-        return response()->json(
-            [
-                'data' => $this->data,
-                'pagination' => $this->pagination,
-                'message' => $this->message,
-                'statusCode' => $this->statusCode,
-            ],
-            $this->statusCode);
+    public function returnData() {
+        return response()->json( [
+            'data' => $this->data,
+            'pagination' => $this->pagination,
+            'message' => $this->message,
+            'statusCode' => $this->statusCode,
+        ],
+        $this->statusCode);
     }
 }

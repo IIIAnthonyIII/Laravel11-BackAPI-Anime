@@ -1,17 +1,13 @@
 <?php
-
 namespace App\Services;
-
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class AuthService
-{
-    public function getId($id)
-    {
+class AuthService {
+    public function getId($id) {
         try {
             $usuario = new User();
             if ((auth()->user())) {
@@ -19,7 +15,6 @@ class AuthService
             } else {
                 throw new \Exception('No autorizado', 400);
             }
-
             if (sizeof($query->get()) == 0) {
                 throw new \Exception('No existe este usuario o se encuentra eliminado', 400);
             }
@@ -29,8 +24,7 @@ class AuthService
         }
     }
 
-    public function changePassword($data)
-    {
+    public function changePassword($data) {
         DB::beginTransaction();
         try {
             $validator = Validator::make($data->all(), [
@@ -59,8 +53,7 @@ class AuthService
         }
     }
 
-    public function update($data, $id)
-    {
+    public function update($data, $id) {
         DB::beginTransaction();
         try {
             $validator = Validator::make($data->all(), [

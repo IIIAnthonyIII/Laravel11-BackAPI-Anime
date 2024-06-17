@@ -21,6 +21,15 @@ Route::group([
     Route::get('/user/{id}', [AuthController::class, 'getById'])->middleware('auth:api')->name('getById');
 });
 
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'user'
+], function ($router) {
+    Route::get('/', [UserController::class, 'index'])->name('index');
+    Route::delete('/{id}', [UserController::class, 'delete'])->name('delete');
+    Route::put('/activar/{id}', [UserController::class, 'activar'])->name('activar');
+});
+
 // Route::controller(AnimeController::class)->group(function () {
 //     Route::post('anime', 'store');
 //     Route::get('anime', 'index');
