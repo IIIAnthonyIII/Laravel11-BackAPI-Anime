@@ -41,4 +41,15 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims() {
         return [];
     }
+
+    //Tables relations
+    public function anime()
+    {
+        return $this->hasMany(Anime::class);
+    }
+
+    public function type()
+    {
+        return $this->hasMany(Type::class);
+    }             
 }
