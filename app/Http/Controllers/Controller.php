@@ -33,11 +33,9 @@ class Controller extends BaseController {
     }
 
     public function setError($message, $statusCode) {
-        if ($statusCode >= 100 && $statusCode < 600) {
-            $this->apiResponse->setError($message, $statusCode);
-        } else {
-            $this->apiResponse->setError($message, 500);
-        }
+        ($statusCode >= 100 && $statusCode < 600) 
+        ? $this->apiResponse->setError($message, $statusCode)
+        : $this->apiResponse->setError($message, 500);
     }
 
     public function setPagination($pagination) {

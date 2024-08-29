@@ -11,8 +11,7 @@ class Anime extends Model
     protected $table = "anime";
     protected $guarded = [];
 
-    public function user()
-    {
+    public function user() {
         return $this->belongsTo(User::class);
     }
 }

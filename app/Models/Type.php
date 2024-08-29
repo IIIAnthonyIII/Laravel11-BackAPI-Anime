@@ -10,11 +10,10 @@ class Type extends Model
     use HasFactory;
 
     // protected $connection = 'DB2';
-    protected $table = "anime";
+    protected $table = "type";
     protected $guarded = [];
 
-    public function user()
-    {
+    public function user() {
         return $this->belongsTo(User::class);
     }
 }

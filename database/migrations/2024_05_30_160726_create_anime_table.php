@@ -3,17 +3,15 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
-    public function up(): void
-    {
+return new class extends Migration {
+    public function up(): void {
         Schema::create('anime', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->integer('episodes');
             $table->date('dateOfIssue');
-            $table->string('activity');
+            // $table->string('activity');
             $table->enum('status', ['A', 'I', 'E'])->default('A');
             $table->unsignedBigInteger('user_create')->nullable();
             $table->foreign('user_create')->references('id')->on('users')->onDelete('set null');
@@ -26,8 +24,7 @@ return new class extends Migration
         });
     }
 
-    public function down(): void
-    {
+    public function down(): void {
         Schema::dropIfExists('anime');
     }
 };

@@ -11,8 +11,7 @@ use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Exception;
-  
-  
+
 class AuthController extends Controller {
     private $service;
     
@@ -62,9 +61,9 @@ class AuthController extends Controller {
 
     public function changePassword(Request $request) {
         try {
-            $User = $this->service->changePassword($request);
+            $user = $this->service->changePassword($request);
             $this->setPagination(null);
-            $this->setDataCorrect($User, 'La contraseña ha sido actualizada.', 200);
+            $this->setDataCorrect($user, 'Contraseña actualizada!!!', 200);
         } catch (\Exception $e) {
             $this->setError($e->getMessage(), $e->getCode());
         }
@@ -74,7 +73,7 @@ class AuthController extends Controller {
     public function update(Request $request, $id) {
         try {
             $usuario = $this->service->update($request, $id);
-            $this->setDataCorrect($usuario, 'El usuario ha sido actualizado', 200);
+            $this->setDataCorrect($usuario, 'El usuario actualizado!!!', 200);
         } catch (\Exception $e) {
             $this->setError($e->getMessage(), $e->getCode());
         }
