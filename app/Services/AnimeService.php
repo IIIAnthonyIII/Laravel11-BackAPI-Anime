@@ -16,9 +16,8 @@ class AnimeService {
         try {
             $query = $this->getDataQuery($data);
             if (request()->has('per_page')) {
-                (request()->get('per_page') <= 0) 
-                  ? throw new \Exception('El parámetro per_page debe ser mayor a 0', 400) 
-                  : $anime = $query->paginate(request()->get('per_page'))->toArray();
+                if (request()->get('per_page') <= 0) throw new \Exception('El parámetro per_page debe ser mayor a 0', 400);
+                $anime = $query->paginate(request()->get('per_page'))->toArray();
             } else {
                 $anime['data'] = $query->get()->toArray();
             }
@@ -43,55 +42,31 @@ class AnimeService {
         } else {
             $query = Anime::where('status', 'A');
         }
-        // if (isset($_GET) && count($_GET) > 0) {
-        //     $query = $this->parametersGet($query, $data);
-        // }
+        if (request()->query->count() > 0) $query = $this->parametersGet($query, $data);
         return $query;
     }
 
     private function parametersGet($query, $data) {
-        $manual = new Anime();
-        $manualQuery = $query;
-
-        if (isset($_GET['fields'])) {
-            $manualQuery = $manual->fields($query, $_GET['fields']);
+        $anime = new Anime();
+        $params = [
+            'fields' => 'fields',
+            'embed' => 'embed',
+            'sort' => 'sort'
+        ];
+        foreach ($params as $param => $method) {
+            if (request()->has($param)) $query = $anime->{$method}($query, request()->get($param));
         }
-
-        if (isset($_GET['slug'])) {
-            $manualQuery = $manual->searchBySlug($query, $_GET['slug']);
+        // Copia de los parámetros de la query
+        $queryParams = request()->query();
+        $excludedParams = [
+            'fields', 'embed', 'sort', 'search', 
+            'per_page', 'page', 'status'
+        ];
+        foreach ($excludedParams as $param) {
+            unset($queryParams[$param]);
         }
-
-        if (isset($_GET['embed'])) {
-            $manualQuery = $manual->embed($query, $_GET['embed']);
-        }
-
-        if (isset($_GET['search'])) {
-            $manualQuery = $manual->search($query, $_GET['search']);
-        }
-
-        if (isset($_GET['sort'])) {
-            $manualQuery = $manual->sort($query, $_GET['sort']);
-        }
-
-        if (isset($_GET['searchAll'])) {
-            $manualQuery = $manual->searchAll($query, $_GET['searchAll'], 'manual');
-        }
-
-        unset(
-            $_GET['fields'],
-            $_GET['embed'],
-            $_GET['sort'],
-            $_GET['search'],
-            $_GET['per_page'],
-            $_GET['page'],
-            $_GET['status'],
-            $_GET['slug'],
-            $_GET['searchAll']
-        );
-        if (isset($_GET) && count($_GET) > 0) {
-            $manualQuery = $manual->parameters($query, $_GET);
-        }
-        return $manualQuery;
+        if (count($queryParams) > 0) $query = $anime->parameters($query, $queryParams);
+        return $query;
     }
 
     public function getId($data, $id) {
@@ -199,20 +174,6 @@ class AnimeService {
         }
     }
 
-    public function delete($id) {
-        try {
-            $anime = Anime::find($id);
-            if ($anime == null) throw new \Exception('No existe este anime', 404);
-            $anime->status = 'I';
-            $anime->user_delete = auth()->user()->id;
-            $anime->date_delete = Carbon::now();
-            $anime->update();
-            return $anime;
-        } catch (\Exception $e) {
-            throw $e;
-        }
-    }
-
     public function activar($id) {
         DB::beginTransaction();
         try {
@@ -228,55 +189,20 @@ class AnimeService {
         }
     }
 
-    public function deleteStatusE($id) {
+    public function delete($id, $data) {
         try {
-            $query = Anime::find($id);
-            if ($query == null) throw new \Exception('No existe este anime', 404);
-            $query->status = 'E';
-            $query->date_delete = Carbon::now();
-            $query->user_delete = auth()->user()->id;
-            $query->update();
-            // //buscamos las relaciones con section y las eliminamos
-            // $sections = $query->sections()->get();
-            // foreach ($sections as $section) {
-            //     $section->status = 'E';
-            //     $section->date_delete = Carbon::now();
-            //     $section->user_delete = auth()->user()->id;
-            //     $section->update();
-            //     //buscamos las relaciones con subsections y las eliminamos
-            //     $subsections = $section->subsections()->get();
-            //     foreach ($subsections as $subsection) {
-            //         $subsection->status = 'E';
-            //         $subsection->date_delete = Carbon::now();
-            //         $subsection->user_delete = auth()->user()->id;
-            //         $subsection->update();
-            //         //buscamos las relaciones con steps y las eliminamos
-            //         $steps = $subsection->steps()->get();
-            //         foreach ($steps as $step) {
-            //             $step->status = 'E';
-            //             $step->date_delete = Carbon::now();
-            //             $step->user_delete = auth()->user()->id;
-            //             $step->update();
-            //             //buscamos las relaciones con files y las eliminamos
-            //             $files = $step->files()->get();
-            //             foreach ($files as $file) {
-            //                 $file->status = 'E';
-            //                 $file->date_delete = Carbon::now();
-            //                 $file->user_delete = auth()->user()->id;
-            //                 $file->update();
-            //                 //eliminamos de s3
-            //                 $s3 = Storage::disk('s3');
-            //                 $s3->delete($file->path);
-            //             }
-            //         }
-            //     }
-            // }
-            return $query;
+            $anime = Anime::find($id);
+            if ($anime == null) throw new \Exception('No existe este anime', 404);
+            $anime->status = $data->permanent ? 'E' : 'I';
+            $anime->user_delete = auth()->user()->id;
+            $anime->date_delete = Carbon::now();
+            $anime->update();
+            return $anime;
         } catch (\Exception $e) {
             throw $e;
         }
     }
-
+    
     private function getSlug($title) {
         $valorRandom = uniqid();
         $slug = Str::of($title)->slug('-')->limit(255 - mb_strlen($valorRandom) - 1, '')->trim('-')->append('-', $valorRandom);

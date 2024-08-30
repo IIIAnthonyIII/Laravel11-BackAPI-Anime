@@ -15,7 +15,7 @@ class AnimeController extends Controller {
     public function index(Request $request) {
         try {
             $response = $this->service->getAll($request);
-            $pagination = (isset($_GET['per_page'])) ? new Pagination($response) : null;
+            $pagination = (request()->has('per_page')) ? new Pagination($response) : null;
             $anime = $response['data'];
             $message = $response['message'];
             $this->setPagination($pagination);
@@ -57,16 +57,6 @@ class AnimeController extends Controller {
         return $this->returnData();
     }
 
-    public function delete($id) {
-        try {
-            $anime = $this->service->delete($id);
-            $this->setDataCorrect($anime, 'Anime eliminado!!!', 200);
-        } catch (\Exception $e) {
-            $this->setError($e->getMessage(), $e->getCode());
-        }
-        return $this->returnData();
-    }
-
     public function activar($id) {
         try {
             $anime = $this->service->activar($id);
@@ -77,10 +67,11 @@ class AnimeController extends Controller {
         return $this->returnData();
     }
 
-    public function deleteStatusE($id) {
+    public function delete($id, Request $request) {
         try {
-            $this->service->deleteStatusE($id);
-            $this->setDataCorrect(null, 'Anime  eliminado definitivamente!!!', 200);
+            $anime = $this->service->delete($id, $request);
+            $message = $request->permanent ? 'Anime eliminado definitivamente!!!' : 'Anime eliminado!!!';
+            $this->setDataCorrect($anime, $message, 200);
         } catch (\Exception $e) {
             $this->setError($e->getMessage(), $e->getCode());
         }
