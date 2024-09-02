@@ -1,7 +1,7 @@
 <?php
 namespace App\Services;
 use App\Models\Anime;
-use App\Services\Traits\HasRelations;
+use App\Services\Traits\Relations;
 // use App\Models\Category;
 // use App\Models\Tag;
 use Illuminate\Support\Facades\Validator;
@@ -10,11 +10,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class AnimeService {
-    use HasRelations;
+    use Relations;
 
-    public function getAll($data) {
+    //../api/anime?per_page=10
+    public function getAll() {
         try {
-            $query = $this->getDataQuery($data);
+            $query = $this->getDataQuery();
             if (request()->has('per_page')) {
                 if (request()->get('per_page') <= 0) throw new \Exception('El parámetro per_page debe ser mayor a 0', 400);
                 $anime = $query->paginate(request()->get('per_page'))->toArray();
@@ -28,7 +29,8 @@ class AnimeService {
         }
     }
 
-    private function getDataQuery($data) {
+    //../api/anime?status=A,I,E
+    private function getDataQuery() {
         if (auth()->check()) {
             if (request()->has('status')) {
                 $query = new Anime();
@@ -42,11 +44,11 @@ class AnimeService {
         } else {
             $query = Anime::where('status', 'A');
         }
-        if (request()->query->count() > 0) $query = $this->parametersGet($query, $data);
+        if (request()->query->count() > 0) $query = $this->parametersGet($query);
         return $query;
     }
 
-    private function parametersGet($query, $data) {
+    private function parametersGet($query) {
         $anime = new Anime();
         $params = [
             'fields' => 'fields',
@@ -56,16 +58,15 @@ class AnimeService {
         foreach ($params as $param => $method) {
             if (request()->has($param)) $query = $anime->{$method}($query, request()->get($param));
         }
-        // Copia de los parámetros de la query
-        $queryParams = request()->query();
+        $queryParamsCopy = request()->query();
         $excludedParams = [
             'fields', 'embed', 'sort', 'search', 
             'per_page', 'page', 'status'
         ];
         foreach ($excludedParams as $param) {
-            unset($queryParams[$param]);
+            unset($queryParamsCopy[$param]);
         }
-        if (count($queryParams) > 0) $query = $anime->parameters($query, $queryParams);
+        if (count($queryParamsCopy) > 0) $query = $anime->parameters($query, $queryParamsCopy);
         return $query;
     }
 

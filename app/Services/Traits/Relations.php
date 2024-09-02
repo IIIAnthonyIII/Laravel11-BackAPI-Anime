@@ -1,7 +1,7 @@
 <?php
 namespace App\Services\Traits;
 
-trait HasRelations {
+trait Relations {
     public function addRelations($relation, $data, $model, $action) {
         try {
             $dataStatusError = [];

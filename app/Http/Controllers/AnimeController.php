@@ -12,9 +12,9 @@ class AnimeController extends Controller {
         parent::__construct();
     }
 
-    public function index(Request $request) {
+    public function index() {
         try {
-            $response = $this->service->getAll($request);
+            $response = $this->service->getAll();
             $pagination = (request()->has('per_page')) ? new Pagination($response) : null;
             $anime = $response['data'];
             $message = $response['message'];
