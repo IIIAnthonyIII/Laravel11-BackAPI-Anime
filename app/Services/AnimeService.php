@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 class AnimeService {
     use Relations;
 
-    //../api/anime?per_page=10
+    //../api/anime?per_page=5&page=1
     public function getAll() {
         try {
             $query = $this->getDataQuery();

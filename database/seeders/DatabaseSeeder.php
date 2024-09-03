@@ -7,10 +7,10 @@ use Illuminate\Support\Facades\Hash;
 class DatabaseSeeder extends Seeder {
     public function run(): void {
         User::factory()->create([
-            'name' => 'Admin',
+            'name' => 'admin',
             'surname' => 'Test',
             'email' => 'test@example.com',
-            'password' => Hash::make('123456')
+            'password' => Hash::make('12345')
         ]);
     }
 }

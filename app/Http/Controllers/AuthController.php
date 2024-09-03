@@ -43,9 +43,9 @@ class AuthController extends Controller {
     public function login() {
         $credentials = request(['email', 'password']);
         if (!$token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Credenciales incorrectas!'], 401);
         }
-        $data =  $this->respondWithToken($token)->original + ['user' => auth()->user()];
+        $data =  $this->respondWithToken($token)->original + ['message' => 'Bienvenid@ ' . auth()->user()->name . '!'];
         return $data;
     }
 
