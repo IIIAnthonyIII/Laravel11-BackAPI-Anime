@@ -30,9 +30,10 @@ Route::group([
     'middleware' => 'api',
     'prefix' => 'anime'
 ], function ($router) {
-    Route::get('/',      [AnimeController::class, 'index'])->name('index');
-    Route::get('/{id}',  [AnimeController::class, 'getById'])->name('getById');
-    Route::post('/',     [AnimeController::class, 'store'])->middleware('auth:api')->name('store');
-    Route::put('/{id}',  [AnimeController::class, 'update'])->middleware('auth:api')->name('update');
-    Route::post('/{id}', [AnimeController::class, 'delete'])->middleware('auth:api')->name('delete');
+    Route::get('/',             [AnimeController::class, 'index'])->name('index');
+    Route::get('/{id}',         [AnimeController::class, 'getById'])->name('getById');
+    Route::post('/',            [AnimeController::class, 'store'])->middleware('auth:api')->name('store');
+    Route::put('/{id}',         [AnimeController::class, 'update'])->middleware('auth:api')->name('update');
+    Route::post('/{id}',        [AnimeController::class, 'delete'])->middleware('auth:api')->name('delete');
+    Route::put('/activar/{id}', [AnimeController::class, 'activar'])->middleware('auth:api')->name('activar');
 });

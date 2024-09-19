@@ -127,15 +127,13 @@ class AnimeService {
     //     return $output_file;
     // }
 
-
     public function update($data, $id) {
         DB::beginTransaction();
         try {
             $validator = Validator::make($data->all(), [
                 'title' => 'required|string|max:100',
                 'episodes' => 'required',
-                'dateOfIssue' => 'required',
-                'status' => 'required|string|max:1'
+                'dateOfIssue' => 'required'
             ]);
             if ($validator->fails()) {
                 $error = $validator->errors()->first();
@@ -151,7 +149,6 @@ class AnimeService {
             $anime->name = $data->name;
             $anime->episodes = $data->episodes;
             $anime->dateOfIssue = $data->dateOfIssue;
-            $anime->status = $data->status;
             $anime->user_modifies = auth()->user()->id;
 
             // $manual->categories()->detach();

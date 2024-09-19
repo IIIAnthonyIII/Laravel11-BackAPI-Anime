@@ -10,7 +10,7 @@ return new class extends Migration {
             $table->string('title')->nullable();
             $table->string('name')->nullable();
             $table->integer('episodes')->nullable();
-            $table->date('dateOfIssue')->nullable();
+            $table->dateTime('dateOfIssue')->nullable();
             // $table->string('activity');
             $table->enum('status', ['A', 'I', 'E'])->default('A');
             $table->unsignedBigInteger('user_create')->nullable();
