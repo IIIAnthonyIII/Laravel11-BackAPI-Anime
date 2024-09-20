@@ -101,6 +101,7 @@ class AnimeService {
             $anime = new Anime();
             $anime->title = $data->title;
             $anime->name = $data->name;
+            $anime->image = $data->image;
             $anime->episodes = $data->episodes;
             $anime->dateOfIssue = $data->dateOfIssue;
             $anime->user_create = auth()->user()->id;
@@ -147,6 +148,7 @@ class AnimeService {
             }
             $anime->title = $data->title;
             $anime->name = $data->name;
+            $anime->image = $data->image;
             $anime->episodes = $data->episodes;
             $anime->dateOfIssue = $data->dateOfIssue;
             $anime->user_modifies = auth()->user()->id;

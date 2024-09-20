@@ -11,7 +11,7 @@ return new class extends Migration {
             $table->string('name')->nullable();
             $table->integer('episodes')->nullable();
             $table->dateTime('dateOfIssue')->nullable();
-            // $table->string('activity');
+            $table->string('image')->nullable();
             $table->enum('status', ['A', 'I', 'E'])->default('A');
             $table->unsignedBigInteger('user_create')->nullable();
             $table->foreign('user_create')->references('id')->on('users')->onDelete('set null');
