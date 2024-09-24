@@ -12,6 +12,7 @@ return new class extends Migration {
             $table->integer('episodes')->nullable();
             $table->dateTime('dateOfIssue')->nullable();
             $table->string('image')->nullable();
+            $table->foreignId('type_id')->nullable()->constrained('type');
             $table->enum('status', ['A', 'I', 'E'])->default('A');
             $table->unsignedBigInteger('user_create')->nullable();
             $table->foreign('user_create')->references('id')->on('users')->onDelete('set null');

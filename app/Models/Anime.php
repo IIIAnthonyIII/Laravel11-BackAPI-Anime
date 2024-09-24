@@ -20,7 +20,11 @@ class Anime extends Model {
     protected $guarded = [];
 
     public function user() {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, "id");
+    }
+
+    public function type() {
+        return $this->belongsTo(Type::class)->where('status', '!=', 'E');
     }
 
     // .../api/anime?sort=-id

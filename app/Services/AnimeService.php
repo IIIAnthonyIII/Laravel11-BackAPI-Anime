@@ -2,8 +2,6 @@
 namespace App\Services;
 use App\Models\Anime;
 use App\Services\Traits\Relations;
-// use App\Models\Category;
-// use App\Models\Tag;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -98,12 +96,13 @@ class AnimeService {
             }
             $animeTitle = Anime::where('title', $data->title)->first();
             if ($animeTitle != null) throw new \Exception('El anime ya existe, por favor ingrese uno nuevo', 409);
-            $anime = new Anime();
-            $anime->title = $data->title;
-            $anime->name = $data->name;
-            $anime->image = $data->image;
-            $anime->episodes = $data->episodes;
+            $anime              = new Anime();
+            $anime->title       = $data->title;
+            $anime->name        = $data->name;
+            $anime->image       = $data->image;
+            $anime->episodes    = $data->episodes;
             $anime->dateOfIssue = $data->dateOfIssue;
+            $anime->type_id     = $data->type_id;
             $anime->user_create = auth()->user()->id;
             $anime->save();
             DB::commit();
@@ -113,20 +112,6 @@ class AnimeService {
             throw $e;
         }
     }
-
-    // public function base64_to_jpeg($base64_string, $output_file) {
-    //     // open the output file for writing
-    //     $ifp = fopen($output_file, 'wb');
-    //     // split the string on commas
-    //     // $data[ 0 ] == "data:image/png;base64"
-    //     // $data[ 1 ] == <actual base64 string>
-    //     $data = explode(',', $base64_string);
-    //     // we could add validation here with ensuring count( $data ) > 1
-    //     fwrite($ifp, base64_decode($data[1]));
-    //     // clean up the file resource
-    //     fclose($ifp);
-    //     return $output_file;
-    // }
 
     public function update($data, $id) {
         DB::beginTransaction();
@@ -146,25 +131,13 @@ class AnimeService {
                 $animeTitle = Anime::where('title', $data->title)->first();
                 if ($animeTitle != null) throw new \Exception('El anime ya existe, por favor ingrese uno nuevo', 409);
             }
-            $anime->title = $data->title;
-            $anime->name = $data->name;
-            $anime->image = $data->image;
-            $anime->episodes = $data->episodes;
-            $anime->dateOfIssue = $data->dateOfIssue;
+            $anime->title         = $data->title;
+            $anime->name          = $data->name;
+            $anime->image         = $data->image;
+            $anime->episodes      = $data->episodes;
+            $anime->dateOfIssue   = $data->dateOfIssue;
+            $anime->type_id       = $data->type_id;
             $anime->user_modifies = auth()->user()->id;
-
-            // $manual->categories()->detach();
-            // if ($data->categories != null) {
-            //     $this->addRelations($manual->categories(), $data->categories, new Category(), 'update');
-            // }
-
-            // $manual->tags()->detach();
-            // if ($data->tags != null) {
-            //     $this->addRelations($manual->tags(), $data->tags, new Tag(), 'update');
-            // }
-            
-            // $manual->categories;
-            // $manual->tags;
             $anime->update();
             DB::commit();
             return $anime;

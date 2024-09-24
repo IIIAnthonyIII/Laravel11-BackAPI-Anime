@@ -41,13 +41,11 @@ class User extends Authenticatable implements JWTSubject {
     }
 
     //Tables relations
-    public function anime()
-    {
-        return $this->hasMany(Anime::class);
+    public function animes() {
+        return $this->hasMany(Anime::class, "user_create");
     }
 
-    public function type()
-    {
-        return $this->hasMany(Type::class);
+    public function types() {
+        return $this->hasMany(Type::class, "user_create");
     }             
 }

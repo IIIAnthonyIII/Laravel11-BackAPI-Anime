@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\AnimeController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TypeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,4 +37,16 @@ Route::group([
     Route::put('/{id}',         [AnimeController::class, 'update'])->middleware('auth:api')->name('update');
     Route::post('/{id}',        [AnimeController::class, 'delete'])->middleware('auth:api')->name('delete');
     Route::put('/activar/{id}', [AnimeController::class, 'activar'])->middleware('auth:api')->name('activar');
+});
+
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'type'
+], function ($router) {
+    Route::get('/',             [TypeController::class, 'index'])->name('index');
+    Route::get('/{id}',         [TypeController::class, 'getById'])->name('getById');
+    Route::post('/',            [TypeController::class, 'store'])->middleware('auth:api')->name('store');
+    Route::put('/{id}',         [TypeController::class, 'update'])->middleware('auth:api')->name('update');
+    Route::post('/{id}',        [TypeController::class, 'delete'])->middleware('auth:api')->name('delete');
+    Route::put('/activar/{id}', [TypeController::class, 'activar'])->middleware('auth:api')->name('activar');
 });
