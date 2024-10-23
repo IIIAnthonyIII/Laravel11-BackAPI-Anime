@@ -1,12 +1,10 @@
 <?php
 namespace App\Services;
-use App\Models\Anime;
 use App\Models\Type;
 use App\Services\Traits\Relations;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class TypeService {
     use Relations;
@@ -87,7 +85,8 @@ class TypeService {
         DB::beginTransaction();
         try {
             $validator = Validator::make($data->all(), [
-                'name' => 'required|string|max:100'
+                'name'  => 'required|string',
+                'color' => 'required|string'
             ]);
             if ($validator->fails()) {
                 $error = $validator->errors()->first();
@@ -97,6 +96,7 @@ class TypeService {
             if ($typeName != null) throw new \Exception('El tipo ya existe, por favor ingrese uno nuevo', 409);
             $type = new Type();
             $type->name = $data->name;
+            $type->color = $data->color;
             $type->user_create = auth()->user()->id;
             $type->save();
             DB::commit();
@@ -111,7 +111,8 @@ class TypeService {
         DB::beginTransaction();
         try {
             $validator = Validator::make($data->all(), [
-                'name' => 'required|string|max:100'
+                'name'  => 'required|string',
+                'color' => 'required|string'
             ]);
             if ($validator->fails()) {
                 $error = $validator->errors()->first();
@@ -124,6 +125,7 @@ class TypeService {
                 if ($typeName != null) throw new \Exception('El tipo ya existe, por favor ingrese uno nuevo', 409);
             }
             $type->name = $data->name;
+            $type->color = $data->color;
             $type->user_modifies = auth()->user()->id;
             $type->update();
             DB::commit();

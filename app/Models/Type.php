@@ -13,9 +13,9 @@ class Type extends Model {
     use HasFactory;
     use Sorts, Embed, Fields, Parameters;
 
-    public $allowedSorts = ['id', 'name', 'status', 'created_at', 'updated_at'];
-    public $allowedParameters = ['id', 'name', 'status', 'created_at', 'updated_at'];
-    public $allowedFields = ['id', 'name', 'status', 'created_at', 'updated_at'];
+    public $allowedSorts = ['id', 'name', 'color', 'status', 'created_at', 'updated_at'];
+    public $allowedParameters = ['id', 'name', 'color', 'status', 'created_at', 'updated_at'];
+    public $allowedFields = ['id', 'name', 'color', 'status', 'created_at', 'updated_at'];
 
     // protected $connection = 'DB2';
     protected $table = "type";
