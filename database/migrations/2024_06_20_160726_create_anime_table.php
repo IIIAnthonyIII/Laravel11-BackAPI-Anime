@@ -9,6 +9,7 @@ return new class extends Migration {
             $table->id();
             $table->string('title')->nullable();
             $table->string('name')->nullable();
+            $table->integer('relation')->nullable();
             $table->integer('episodes')->nullable();
             $table->dateTime('dateOfIssue')->nullable();
             $table->string('image')->nullable();
