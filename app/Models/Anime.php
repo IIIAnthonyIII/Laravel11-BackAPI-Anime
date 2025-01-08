@@ -3,13 +3,14 @@ namespace App\Models;
 use App\Models\Traits\Embed;
 use App\Models\Traits\Fields;
 use App\Models\Traits\Parameters;
+use App\Models\Traits\Search;
 use App\Models\Traits\Sorts;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Anime extends Model {
     use HasFactory;
-    use Sorts, Embed, Fields, Parameters;
+    use Sorts, Embed, Fields, Parameters, Search;
 
     public $allowedSorts = ['id', 'title', 'name', 'episodes', 'dateOfIssue', 'status', 'created_at', 'updated_at'];
     public $allowedParameters = ['id', 'title', 'name', 'episodes', 'dateOfIssue', 'status', 'created_at', 'updated_at'];
@@ -47,11 +48,11 @@ class Anime extends Model {
         return $this->scopeFields($query, $fields);
     }
 
-    //Buscar por nombre y etiqueta
-    // public function search($query, $search)
-    // {
-    //     return $this->scopeSearch($query, $search);
-    // }
+    //Buscar por nombre
+    public function search($query, $search)
+    {
+        return $this->scopeSearchName($query, $search);
+    }
 
     // //Buscar por slug
     // public function searchBySlug($query, $slug)

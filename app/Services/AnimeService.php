@@ -49,6 +49,7 @@ class AnimeService {
     private function parametersGet($query) {
         $anime = new Anime();
         $params = [
+            'search' => 'search',
             'fields' => 'fields',
             'embed' => 'embed',
             'sort' => 'sort'
@@ -102,9 +103,15 @@ class AnimeService {
             $anime->image       = $data->image;
             $anime->episodes    = $data->episodes;
             $anime->dateOfIssue = $data->dateOfIssue;
+            $anime->relation    = $data->relation;
             $anime->type_id     = $data->type_id;
             $anime->user_create = auth()->user()->id;
             $anime->save();
+            if ($data->firstTime) {
+                $lastAnime = Anime::latest('id')->first();
+                $lastAnime->relation = $lastAnime->id;
+                $lastAnime->update();
+            }
             DB::commit();
             return  $anime;
         } catch (\Exception $e) {
@@ -136,6 +143,7 @@ class AnimeService {
             $anime->image         = $data->image;
             $anime->episodes      = $data->episodes;
             $anime->dateOfIssue   = $data->dateOfIssue;
+            $anime->relation      = $data->relation;
             $anime->type_id       = $data->type_id;
             $anime->user_modifies = auth()->user()->id;
             $anime->update();
